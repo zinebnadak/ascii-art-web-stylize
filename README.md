@@ -1,2 +1,2 @@
-# Ascii-art-web-stylize
-Gritlab project 
+# ascii-art-web-stylize
+Work in progress.
