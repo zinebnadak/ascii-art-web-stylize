@@ -13,7 +13,7 @@ You type a text, pick a banner (`standard`, `shadow` or `thinkertoy`), press the
 ![frontend](images/frontend.png)
 
 ## Responsive design (Zineb)
-- [ ] Works on phone (375px), tablet (768px) and desktop (1440px)
+- [ ] Works on phone (375px), tablet (768px) and desktop (1440px) - open Cmd + Option + I
 - [ ] No sideways page scroll, only the art box scrolls if the art is wide
 - [ ] Title fits on one line on small screens
 - [ ] Less empty space around the page on phones
@@ -35,7 +35,7 @@ cd ascii-art-web
 go run .
 ```
 
-Then open [http://localhost:8080](http://localhost:8080) in your browser.
+Then open [http://localhost:8080](http://localhost:8080) in Crome to be able to use devtools.
 
 | Method | Route        | What it does                                  |
 |--------|--------------|-----------------------------------------------|
