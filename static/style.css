@@ -138,3 +138,47 @@ pre {
     line-height: 1.15;
     color: #f5b942;
 }
+
+
+/* RESPONSIVE DESIGN (Zineb) */
+
+textarea {
+    font-size: 1.1rem;
+}
+
+/* phones screens 600px wide or less */
+@media (max-width: 600px) {
+
+    main {
+        padding: 24px 12px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+        white-space: nowrap;
+    }
+
+    /* less padding inside the form so it´s more room for content */
+    form {
+        padding: 16px;
+    }
+
+    /* banner buttons */
+    .banners label {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* art box for less padding  */
+    .screen {
+        padding: 12px;
+    }
+
+    /* slightly smaller art */
+    pre {
+        font-size: 12px;
+    }
+}
