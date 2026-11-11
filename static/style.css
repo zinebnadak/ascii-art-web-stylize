@@ -5,8 +5,8 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #14161b;
-    color: #e8e6e3;
+    background: #f7f9fb;
+    color: #1c2430;
     font-family: "Segoe UI", system-ui, sans-serif;
 }
 
@@ -22,7 +22,7 @@ h1 {
     font-family: Consolas, "Courier New", monospace;
     font-size: 2rem;
     letter-spacing: 6px;
-    color: #f5b942;
+    color: #0e7490;
 }
 
 /* stack the form elements vertically */
@@ -31,8 +31,8 @@ form {
     flex-direction: column;
     gap: 12px;
     padding: 24px;
-    background: #1d2027;
-    border: 1px solid #2c3038;
+    background: #ffffff;
+    border: 1px solid #e3e8ee;
     border-radius: 12px;
 }
 
@@ -42,16 +42,16 @@ form > span {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #9aa0aa;
+    color: #6b7685;
 }
 
 textarea {
     min-height: 90px;
     padding: 12px;
     resize: vertical;
-    background: #14161b;
-    color: #e8e6e3;
-    border: 1px solid #2c3038;
+    background: #f7f9fb;
+    color: #1c2430;
+    border: 1px solid #e3e8ee;
     border-radius: 8px;
     font-family: Consolas, "Courier New", monospace;
     font-size: 1rem;
@@ -59,7 +59,7 @@ textarea {
 
 textarea:focus {
     outline: none;
-    border-color: #f5b942;
+    border-color: #0e7490;
 }
 
 .banners {
@@ -75,33 +75,33 @@ textarea:focus {
 
 .banners label {
     padding: 8px 18px;
-    border: 1px solid #2c3038;
+    border: 1px solid #e3e8ee;
     border-radius: 999px;
     cursor: pointer;
-    color: #9aa0aa;
+    color: #6b7685;
 }
 
 .banners label:hover {
-    color: #e8e6e3;
+    color: #1c2430;
 }
 
 .banners input:checked + label {
-    background: #f5b942;
-    border-color: #f5b942;
-    color: #14161b;
+    background: #0e7490;
+    border-color: #0e7490;
+    color: #ffffff;
     font-weight: 600;
 }
 
 .banners input:focus-visible + label {
-    outline: 2px solid #f5b942;
+    outline: 2px solid #0e7490;
     outline-offset: 2px;
 }
 
 button {
     margin-top: 8px;
     padding: 12px;
-    background: #f5b942;
-    color: #14161b;
+    background: #0e7490;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
@@ -110,7 +110,7 @@ button {
 }
 
 button:hover {
-    background: #ffcb5c;
+    background: #0b5f75;
 }
 
 /* the display screen */
@@ -118,8 +118,8 @@ button:hover {
     margin-top: 24px;
     padding: 20px;
     min-height: 150px;
-    background: #0b0c0f;
-    border: 1px solid #2c3038;
+    background: #eef3f6;
+    border: 1px solid #e3e8ee;
     border-radius: 12px;
     overflow-x: auto;   /* wide art scrolls sideways instead of wrapping */
 }
@@ -136,7 +136,51 @@ pre {
     font-family: Consolas, "Courier New", monospace;
     font-size: 14px;
     line-height: 1.15;
-    color: #f5b942;
+    color: #0e7490;
+}
+
+
+/* RESPONSIVE DESIGN (Zineb) */
+
+textarea {
+    font-size: 1.1rem;
+}
+
+/* phones screens 600px wide or less */
+@media (max-width: 600px) {
+
+    main {
+        padding: 24px 12px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+        white-space: nowrap;
+    }
+
+    /* less padding inside the form so it's more room for content */
+    form {
+        padding: 16px;
+    }
+
+    /* banner buttons */
+    .banners label {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* art box for less padding */
+    .screen {
+        padding: 12px;
+    }
+
+    /* slightly smaller art */
+    pre {
+        font-size: 12px;
+    }
 }
 
 
