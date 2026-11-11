@@ -18,11 +18,10 @@ You type a text, pick a banner (`standard`, `shadow` or `thinkertoy`), press the
 
 ## Responsive design (Zineb)
 - [ ] Works on phone (375px), tablet (768px) and desktop (1440px) - open Cmd + Option + I
-- [ ] No sideways page scroll, only the art box scrolls if the art is wide
-- [ ] Less empty space around the page on phones
-- [ ] Banner buttons wrap on small screens
+- [ ] No sideways page scroll
 - [ ] Input text is big enough to read on any screen 
-- [ ] Textarea only resizes vertically, so it can't overflow the screen
+- [ ] Textarea only resizes vertically
+- [ ] Error page with title and a hint for fix each status code
 
 ## Interactive design (Imad)
 - [ ]
