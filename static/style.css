@@ -226,3 +226,71 @@ textarea {
         font-size: 12px;
     }
 }
+
+
+
+
+/* ERROR PAGES (400, 404, 405, 500) */
+
+/* center everything on the error page */
+.error-page {
+    text-align: center;
+    padding-top: 96px;
+}
+
+/* the big status number */
+.error-code {
+    margin: 0;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #0e7490;
+}
+
+/* short title: normal font, wraps if needed */
+.error-page h1 {
+    margin: 16px 0 8px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 1.75rem;
+    letter-spacing: 0;
+    white-space: normal;
+    color: #1c2430;
+}
+
+/* how to fix it */
+.error-hint {
+    margin: 0 auto 32px;
+    max-width: 420px;
+    color: #6b7685;
+}
+
+/* looks like the Generate button */
+.home-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #0e7490;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background: #0b5f75;
+}
+
+/* phones */
+@media (max-width: 600px) {
+    .error-page {
+        padding-top: 48px;
+    }
+
+    .error-code {
+        font-size: 4rem;
+    }
+
+    .error-page h1 {
+        font-size: 1.4rem;
+    }
+}
