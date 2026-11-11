@@ -1,19 +1,30 @@
 # ascii-art-web
 
-A small web page that turns your text into ASCII art, for anyone who wants to try ascii-art without the terminal.
+A small web page that turns your text into ASCII art, for anyone who wants to try ascii-art without the terminal. This project focuses on making the site more appealing, responsive and interactive, and on giving the user clear feedback, using CSS.
 
-![frontend](images/frontend.png)
+## Authors
+- Imad Elalouaji (ImadeddineElalouaji)
+- Zineb Nadak (zinebnadak)
 
-## Description
+## How it works
 ascii-art-web is a Go HTTP server that gives a web GUI to our previous project, ascii-art.
 You type a text, pick a banner (`standard`, `shadow` or `thinkertoy`), press the button, and the server sends back the page with your text drawn in ASCII art.
 
-![git command](images/git.png)
+![frontend](images/frontend.png)
 
-## Authors
-- Mohamed Bouras (mbouras)
-- Safae Bouras (sbouras)
-- Zineb Nadak (zinebnadak)
+## Responsive design (Zineb)
+- [ ] Works on phone (375px), tablet (768px) and desktop (1440px)
+- [ ] No sideways page scroll, only the art box scrolls if the art is wide
+- [ ] Title fits on one line on small screens
+- [ ] Less empty space around the page on phones
+- [ ] Banner buttons wrap neatly on small screens
+- [ ] Input text is big enough to read on any screen
+- [ ] Textarea only resizes vertically, so it can't overflow the screen
+
+## Interactive design (Imad)
+- [ ]
+- [ ]
+- [ ]
 
 ## Usage: how to run
 You need Go installed.
@@ -37,24 +48,5 @@ Status codes:
 - `404 Not Found` for unknown pages, or when a template or banner file is missing
 - `405 Method Not Allowed` when the wrong method is used on a route
 - `500 Internal Server Error` for anything else that goes wrong
-
-## Implementation details: algorithm
-1. Each banner file has the 95 printable ASCII characters (from space ` ` to `~`), in order.
-   Every character is 8 lines tall and there is one empty line before each one, so a character takes 9 lines.
-2. The server reads the chosen banner file and splits it into lines (`\r\n` is turned into `\n` first, because `thinkertoy.txt` uses Windows line endings).
-3. The start line of a character is found with: `(character - 32) * 9 + 1`.
-4. The text from the form is split on new lines. For every part:
-   - if it is empty, we add one empty line;
-   - otherwise we build 8 rows, and for each row we join the matching line of every character.
-5. The result is put in the `templates/index.html` template inside a `<pre>` tag, so spaces and line breaks stay the same.
-
-Project structure:
-```
-main.go           server, routes and status codes
-art.go            turns the text into ASCII art
-templates/        HTML template
-static/           CSS
-banners/          standard, shadow and thinkertoy
-```
 
 Built at [grit:lab](https://gritlab.ax/) Åland (01-edu peer-learning program).
