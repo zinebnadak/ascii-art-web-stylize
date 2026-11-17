@@ -23,11 +23,12 @@ You type a text, pick a banner (`standard`, `shadow` or `thinkertoy`), press the
 - [ ] Textarea only resizes vertically
 - [ ] Error page with title and a hint for fix each status code
 
-## Interactive design (Imad)
-- [ ]
-- [ ]
-- [ ]
 
+## Interactive design (Imad)
+- [x] Real-time live ASCII art generation as you type or switch fonts using the Fetch API (no page reload required)
+- [x] Live character counter tracking input length in real time
+- [x] One-click "Copy Art" button using the Clipboard API with visual confirmation feedback
+- [x] Interactive Dark Mode / Light Mode theme switcher
 ## Usage: how to run and test
 You need Go installed.
 

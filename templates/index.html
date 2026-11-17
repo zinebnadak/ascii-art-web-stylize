@@ -2,19 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- viewport makes page fit phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Theme variables */
+        :root {
+            --bg-color: #f7f9fb;
+            --text-color: #1c2430;
+            --card-bg: #ffffff;
+            --border-color: #e3e8ee;
+            --screen-bg: #eef3f6;
+            --accent-color: #0e7490;
+        }
+        [data-theme="dark"] {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --card-bg: #1f2937;
+            --border-color: #374151;
+            --screen-bg: #0b0f17;
+            --accent-color: #38bdf8;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        form {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+        textarea {
+            background-color: var(--bg-color) !important;
+            color: var(--text-color) !important;
+            border-color: var(--border-color) !important;
+        }
+        .screen {
+            background-color: var(--screen-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+        pre {
+            color: var(--accent-color) !important;
+        }
+        .banners label {
+            border-color: var(--border-color);
+        }
+    </style>
 </head>
 <body>
     <main>
-        <h1>ASCII ART WEB</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+            <h1 style="margin: 0;">ASCII ART WEB</h1>
+            <!-- NEW FEATURE: Theme Toggle Button -->
+            <button id="theme-toggle" type="button" style="padding: 8px 16px; margin: 0; background: #5a6573; font-size: 0.9rem;">🌙 Dark Mode</button>
+        </div>
 
         <form action="/ascii-art" method="POST">
             <label for="text">Text</label>
-                        <textarea id="text" name="text" placeholder="Type something..." required>{{.Text}}</textarea> <!-- REQUIRED FIELD , the text gets saved-->
+            <textarea id="text" name="text" placeholder="Type something..." required>{{.Text}}</textarea>
+            
+            <!-- Character Counter -->
+            <div style="font-size: 0.8rem; color: #6b7685; text-align: right; margin-top: -6px;">
+                <span id="char-count">0</span> characters
+            </div>
 
-            <!-- ALSO REQUIRED FIELD, the font gets saved-->
             <span>Font</span>
 
             <div class="banners">
@@ -34,40 +85,79 @@
             <button type="submit">Generate art</button>
         </form>
 
-        <!-- PLACEHOLDER for the Ascii art-->
-        <div class="screen">
-            <div class="screen">
+        <!-- ASCII art screen -->
+        <div class="screen" style="position: relative;">
+            <!-- Copy Button -->
+            <button id="copy-btn" type="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 0.8rem; margin: 0; background: #5a6573;">Copy Art</button>
+            <div class="screen" style="margin-top: 0; border: none; padding: 0; background: transparent;">
                 <pre>{{.Art}}</pre>
             </div>
         </div>
 
     </main>
+
+    <script>
+        const form = document.querySelector('form');
+        const textarea = document.getElementById('text');
+        const preOutput = document.querySelector('pre');
+        const radios = document.querySelectorAll('input[name="banner"]');
+        const charCountSpan = document.getElementById('char-count');
+        const copyBtn = document.getElementById('copy-btn');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        // Character Counter
+        function updateCharCount() {
+            charCountSpan.textContent = textarea.value.length;
+        }
+        updateCharCount();
+        textarea.addEventListener('input', updateCharCount);
+
+        // Live Art Generation via fetch
+        function updateArt() {
+            const formData = new FormData(form);
+            
+            fetch('/ascii-art', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newPre = doc.querySelector('pre');
+                if (newPre) {
+                    preOutput.textContent = newPre.textContent;
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        textarea.addEventListener('input', updateArt);
+        radios.forEach(radio => {
+            radio.addEventListener('change', updateArt);
+        });
+
+        // Copy Button Logic
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(preOutput.textContent).then(() => {
+                copyBtn.textContent = 'Copied! ✨';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy Art';
+                }, 2000);
+            });
+        });
+
+        // Dark / Light Mode Toggle Logic
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggleBtn.textContent = '🌙 Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggleBtn.textContent = '☀️ Light Mode';
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-<!-- 
-NOTES: 
-- The server only sends files it’s told to send, so whoever writes main.go must add: http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static")))) 
-- Open webpage with: open templates/index.html
-- “if Banner equals shadow, write the word checked, otherwise write nothing”
-- THE Go code must send the template a struct with exactly these three field:
-
-type PageData struct {
-    Text   string
-    Banner string
-    Art    string
-}
-
-PROBLEM: 
-we need a special tag that keeps spaces and line breaks exactly as they are.
--->
-
-
-
-
-
-
-
-    
-

@@ -1,3 +1,26 @@
+:root {
+    --bg-page: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-input: #f8fafc;
+    --bg-terminal: #0f172a;
+    
+    --primary: #0e7490;
+    --primary-hover: #0891b2;
+    --primary-light: rgba(14, 116, 144, 0.12);
+    
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-terminal: #38bdf8;
+    
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    
+    --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,152 +28,207 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #f7f9fb;
-    color: #1c2430;
-    font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg-page);
+    background-image: radial-gradient(at 50% 0%, #e0f2fe 0px, transparent 55%);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* center the page */
+/* Center the page */
 main {
     max-width: 900px;
     margin: 0 auto;
-    padding: 48px 16px;
+    padding: 56px 20px;
 }
 
 h1 {
     margin: 0 0 32px;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 2rem;
+    font-family: var(--font-mono);
+    font-size: 2.25rem;
+    font-weight: 800;
     letter-spacing: 6px;
-    color: #0e7490;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #0e7490 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* stack the form elements vertically */
+/* Form Card */
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 24px;
-    background: #ffffff;
-    border: 1px solid #e3e8ee;
-    border-radius: 12px;
+    gap: 16px;
+    padding: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
 }
 
 label[for="text"],
 form > span {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #5a6573;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
 }
 
 textarea {
-    min-height: 90px;
-    padding: 12px;
+    min-height: 100px;
+    padding: 14px 16px;
     resize: vertical;
-    background: #f7f9fb;
-    color: #1c2430;
-    border: 1px solid #e3e8ee;
-    border-radius: 8px;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 1rem;
+    background: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    transition: var(--transition);
+}
+
+textarea:hover {
+    border-color: #cbd5e1;
 }
 
 textarea:focus {
     outline: none;
-    border-color: #0e7490;
+    background: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
 }
 
+/* Banner Pill Selectors */
 .banners {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
 .banners input {
     position: absolute;
     opacity: 0;
+    pointer-events: none;
 }
 
 .banners label {
     padding: 8px 18px;
-    border: 1px solid #e3e8ee;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
     border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
     cursor: pointer;
-    color: #6b7685;
+    user-select: none;
+    transition: var(--transition);
 }
 
 .banners label:hover {
-    color: #1c2430;
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: var(--text-main);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .banners input:checked + label {
-    background: #0e7490;
-    border-color: #0e7490;
+    background: var(--primary);
+    border-color: var(--primary);
     color: #ffffff;
     font-weight: 600;
+    box-shadow: 0 4px 12px rgba(14, 116, 144, 0.25);
 }
 
 .banners input:focus-visible + label {
-    outline: 2px solid #0e7490;
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
 
+/* Submit Button */
 button {
     margin-top: 8px;
-    padding: 12px;
-    background: #0e7490;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
     color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
+    font-family: var(--font-sans);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(14, 116, 144, 0.2);
+    transition: var(--transition);
 }
 
 button:hover {
-    background: #0b5f75;
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #0369a1 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(14, 116, 144, 0.3);
 }
 
-/* the display screen */
+button:active {
+    transform: translateY(0);
+}
+
+/* Terminal Display Screen */
 .screen {
-    margin-top: 24px;
-    padding: 20px;
-    min-height: 150px;
-    background: #eef3f6;
-    border: 1px solid #e3e8ee;
-    border-radius: 12px;
-    overflow-x: auto;   /* wide art scrolls sideways instead of wrapping */
+    margin-top: 28px;
+    padding: 24px;
+    min-height: 160px;
+    background: var(--bg-terminal);
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
 }
 
 .screen .screen {
     margin: 0;
     padding: 0;
     border: none;
+    box-shadow: none;
     min-height: 0;
+    background: transparent;
+}
+
+/* Custom sleek scrollbar for wide ASCII art */
+.screen::-webkit-scrollbar {
+    height: 8px;
+}
+
+.screen::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 0 0 16px 16px;
+}
+
+.screen::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+.screen::-webkit-scrollbar-thumb:hover {
+    background: #475569;
 }
 
 pre {
     margin: 0;
-    font-family: Consolas, "Courier New", monospace;
+    font-family: var(--font-mono);
     font-size: 14px;
-    line-height: 1.15;
-    color: #0e7490;
+    line-height: 1.2;
+    color: var(--text-terminal);
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
 }
 
-
-/* RESPONSIVE DESIGN (Zineb) */
-
-textarea {
-    font-size: 1.1rem;
-}
-
-/* phones screens 600px wide or less */
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
 @media (max-width: 600px) {
-
     main {
-        padding: 24px 12px;
+        padding: 28px 14px;
     }
 
     h1 {
@@ -160,134 +238,90 @@ textarea {
         white-space: nowrap;
     }
 
-    /* less padding inside the form so it's more room for content */
     form {
-        padding: 16px;
+        padding: 18px;
+        border-radius: 12px;
     }
 
-    /* banner buttons */
     .banners label {
         min-height: 44px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
     }
 
-    /* art box for less padding */
     .screen {
-        padding: 12px;
+        padding: 16px;
+        border-radius: 12px;
     }
 
-    /* slightly smaller art */
     pre {
         font-size: 12px;
     }
 }
 
-
-/* RESPONSIVE DESIGN (Zineb) */
-
-textarea {
-    font-size: 1.1rem;
-}
-
-/* phones screens 600px wide or less */
-@media (max-width: 600px) {
-
-    main {
-        padding: 24px 12px;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-        font-size: 1.5rem;
-        letter-spacing: 3px;
-        white-space: nowrap;
-    }
-
-    /* less padding inside the form so it´s more room for content */
-    form {
-        padding: 16px;
-    }
-
-    /* banner buttons */
-    .banners label {
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-    }
-
-    /* art box for less padding  */
-    .screen {
-        padding: 12px;
-    }
-
-    /* slightly smaller art */
-    pre {
-        font-size: 12px;
-    }
-}
-
-
-
-
-/* ERROR PAGES (400, 404, 405, 500) */
-
-/* center everything on the error page */
+/* =========================================
+   ERROR PAGES (400, 404, 405, 500)
+   ========================================= */
 .error-page {
     text-align: center;
     padding-top: 96px;
 }
 
-/* the big status number */
 .error-code {
     margin: 0;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 6rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 6.5rem;
+    font-weight: 800;
     line-height: 1;
-    color: #0e7490;
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* short title: normal font, wraps if needed */
 .error-page h1 {
-    margin: 16px 0 8px;
-    font-family: "Segoe UI", system-ui, sans-serif;
+    margin: 16px 0 10px;
+    font-family: var(--font-sans);
     font-size: 1.75rem;
-    letter-spacing: 0;
+    letter-spacing: -0.5px;
+    text-transform: none;
     white-space: normal;
-    color: #1c2430;
+    background: none;
+    -webkit-text-fill-color: var(--text-main);
+    color: var(--text-main);
 }
 
-/* how to fix it */
 .error-hint {
     margin: 0 auto 32px;
     max-width: 420px;
-    color: #6b7685;
+    color: var(--text-muted);
+    font-size: 1.05rem;
 }
 
-/* looks like the Generate button */
 .home-button {
     display: inline-block;
-    padding: 12px 24px;
-    background: #0e7490;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
     color: #ffffff;
-    border-radius: 8px;
-    font-weight: 700;
+    border-radius: 10px;
+    font-weight: 600;
     text-decoration: none;
+    box-shadow: 0 4px 12px rgba(14, 116, 144, 0.2);
+    transition: var(--transition);
 }
 
 .home-button:hover {
-    background: #0b5f75;
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #0369a1 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(14, 116, 144, 0.3);
 }
 
-/* phones */
 @media (max-width: 600px) {
     .error-page {
         padding-top: 48px;
     }
 
     .error-code {
-        font-size: 4rem;
+        font-size: 4.5rem;
     }
 
     .error-page h1 {
