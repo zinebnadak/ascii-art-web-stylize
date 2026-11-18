@@ -114,11 +114,20 @@ func showError(w http.ResponseWriter, code int) {
 
 	tmpl, err := template.ParseFiles("templates/error.html")
 	if err != nil {
+		log.Println("error template:", err)
+		http.Error(w, http.StatusText(code), code)
+		return
+	}
+
+	// Render into a buffer first: if the template fails we can still send a plain error.
+	var page bytes.Buffer
+	if err := tmpl.Execute(&page, data); err != nil {
+		log.Println("error template:", err)
 		http.Error(w, http.StatusText(code), code)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(code)
-	tmpl.Execute(w, data)
+	w.Write(page.Bytes())
 }

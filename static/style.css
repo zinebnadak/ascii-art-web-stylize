@@ -1,24 +1,67 @@
+/* =========================================
+   THEME (light is the default)
+   ========================================= */
 :root {
     --bg-page: #f1f5f9;
     --bg-card: #ffffff;
     --bg-input: #f8fafc;
-    --bg-terminal: #0f172a;
-    
+    --bg-screen: #eef3f6;
+    --page-glow: #e0f2fe;
+
     --primary: #0e7490;
     --primary-hover: #0891b2;
     --primary-light: rgba(14, 116, 144, 0.12);
-    
+    --secondary: #5a6573;
+    --secondary-hover: #4b5563;
+
+    --title-from: #0e7490;
+    --title-to: #0284c7;
+
     --text-main: #0f172a;
-    --text-muted: #64748b;
-    --text-terminal: #38bdf8;
-    
+    --text-muted: #5b6676;
+    --text-art: #0e7490;
+    --art-glow: transparent;
+    --text-error: #b91c1c;
+
     --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --scrollbar-track: #e2e8f0;
+    --scrollbar-thumb: #94a3b8;
+
     --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
     --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-    
+
     --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     --font-mono: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+    --bg-page: #111827;
+    --bg-card: #1f2937;
+    --bg-input: #111827;
+    --bg-screen: #0b0f17;
+    --page-glow: transparent;
+
+    --primary: #0e7490;
+    --primary-hover: #0891b2;
+    --primary-light: rgba(56, 189, 248, 0.2);
+    --secondary: #374151;
+    --secondary-hover: #4b5563;
+
+    --title-from: #67e8f9;
+    --title-to: #7dd3fc;
+
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --text-art: #38bdf8;
+    --art-glow: rgba(56, 189, 248, 0.25);
+    --text-error: #fca5a5;
+
+    --border-color: #374151;
+    --border-hover: #4b5563;
+    --scrollbar-track: #1e293b;
+    --scrollbar-thumb: #475569;
 }
 
 * {
@@ -29,11 +72,12 @@ body {
     margin: 0;
     min-height: 100vh;
     background: var(--bg-page);
-    background-image: radial-gradient(at 50% 0%, #e0f2fe 0px, transparent 55%);
+    background-image: radial-gradient(at 50% 0%, var(--page-glow) 0px, transparent 55%);
     color: var(--text-main);
     font-family: var(--font-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Center the page */
@@ -43,15 +87,26 @@ main {
     padding: 56px 20px;
 }
 
+/* Header: title + theme button. Wraps to two rows when there is no room. */
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px 16px;
+    margin-bottom: 32px;
+}
+
 h1 {
-    margin: 0 0 32px;
+    margin: 0;
     font-family: var(--font-mono);
     font-size: 2.25rem;
     font-weight: 800;
     letter-spacing: 6px;
     text-transform: uppercase;
-    background: linear-gradient(135deg, #0e7490 0%, #0284c7 100%);
+    background: linear-gradient(135deg, var(--title-from) 0%, var(--title-to) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -90,14 +145,21 @@ textarea {
 }
 
 textarea:hover {
-    border-color: #cbd5e1;
+    border-color: var(--border-hover);
 }
 
 textarea:focus {
     outline: none;
-    background: #ffffff;
+    background: var(--bg-card);
     border-color: var(--primary);
     box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.char-count {
+    margin: -6px 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
 }
 
 /* Banner Pill Selectors */
@@ -127,8 +189,8 @@ textarea:focus {
 }
 
 .banners label:hover {
-    background: #ffffff;
-    border-color: #cbd5e1;
+    background: var(--bg-card);
+    border-color: var(--border-hover);
     color: var(--text-main);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
@@ -147,7 +209,7 @@ textarea:focus {
     outline-offset: 2px;
 }
 
-/* Submit Button */
+/* Main Button */
 button {
     margin-top: 8px;
     padding: 14px 20px;
@@ -174,53 +236,83 @@ button:active {
     transform: translateY(0);
 }
 
-/* Terminal Display Screen */
+/* Small grey buttons: theme toggle and Copy Art */
+.secondary-button {
+    margin: 0;
+    padding: 8px 14px;
+    background: var(--secondary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+}
+
+.secondary-button:hover {
+    background: var(--secondary-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.secondary-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ASCII art screen */
 .screen {
     margin-top: 28px;
-    padding: 24px;
+    padding: 20px 24px 24px;
     min-height: 160px;
-    background: var(--bg-terminal);
-    border: 1px solid #1e293b;
+    background: var(--bg-screen);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     box-shadow: var(--shadow-md);
-    overflow-x: auto;
 }
 
-.screen .screen {
+/* Feedback message on the left, Copy button on the right, above the art */
+.screen-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.feedback {
     margin: 0;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    min-height: 0;
-    background: transparent;
+    min-height: 1.5em;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
-/* Custom sleek scrollbar for wide ASCII art */
-.screen::-webkit-scrollbar {
-    height: 8px;
-}
-
-.screen::-webkit-scrollbar-track {
-    background: #1e293b;
-    border-radius: 0 0 16px 16px;
-}
-
-.screen::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 4px;
-}
-
-.screen::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+.feedback-error {
+    color: var(--text-error);
+    font-weight: 600;
 }
 
 pre {
     margin: 0;
+    padding-bottom: 4px;
+    overflow-x: auto;
     font-family: var(--font-mono);
     font-size: 14px;
     line-height: 1.2;
-    color: var(--text-terminal);
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    color: var(--text-art);
+    text-shadow: 0 0 10px var(--art-glow);
+}
+
+/* Scrollbar for wide ASCII art */
+pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
 }
 
 /* =========================================
@@ -231,8 +323,11 @@ pre {
         padding: 28px 14px;
     }
 
-    h1 {
+    .page-header {
         margin-bottom: 20px;
+    }
+
+    h1 {
         font-size: 1.5rem;
         letter-spacing: 3px;
         white-space: nowrap;
@@ -247,6 +342,10 @@ pre {
         min-height: 44px;
         display: inline-flex;
         align-items: center;
+    }
+
+    .secondary-button {
+        min-height: 44px;
     }
 
     .screen {
@@ -275,6 +374,7 @@ pre {
     line-height: 1;
     background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

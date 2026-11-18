@@ -5,66 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web</title>
     <link rel="stylesheet" href="/static/style.css">
-    <style>
-        /* Theme variables */
-        :root {
-            --bg-color: #f7f9fb;
-            --text-color: #1c2430;
-            --card-bg: #ffffff;
-            --border-color: #e3e8ee;
-            --screen-bg: #eef3f6;
-            --accent-color: #0e7490;
-        }
-        [data-theme="dark"] {
-            --bg-color: #111827;
-            --text-color: #f3f4f6;
-            --card-bg: #1f2937;
-            --border-color: #374151;
-            --screen-bg: #0b0f17;
-            --accent-color: #38bdf8;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-        form {
-            background-color: var(--card-bg) !important;
-            border-color: var(--border-color) !important;
-        }
-        textarea {
-            background-color: var(--bg-color) !important;
-            color: var(--text-color) !important;
-            border-color: var(--border-color) !important;
-        }
-        .screen {
-            background-color: var(--screen-bg) !important;
-            border-color: var(--border-color) !important;
-        }
-        pre {
-            color: var(--accent-color) !important;
-        }
-        .banners label {
-            border-color: var(--border-color);
-        }
-    </style>
+    <script>
+        // Apply the saved theme before the page paints, so it doesn't flash light first.
+        try {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        } catch (e) {}
+    </script>
 </head>
 <body>
     <main>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-            <h1 style="margin: 0;">ASCII ART WEB</h1>
-            <!-- NEW FEATURE: Theme Toggle Button -->
-            <button id="theme-toggle" type="button" style="padding: 8px 16px; margin: 0; background: #5a6573; font-size: 0.9rem;">🌙 Dark Mode</button>
-        </div>
+        <header class="page-header">
+            <h1>ASCII ART WEB</h1>
+            <button id="theme-toggle" class="secondary-button" type="button">🌙 Dark Mode</button>
+        </header>
 
         <form action="/ascii-art" method="POST">
             <label for="text">Text</label>
             <textarea id="text" name="text" placeholder="Type something..." required>{{.Text}}</textarea>
-            
-            <!-- Character Counter -->
-            <div style="font-size: 0.8rem; color: #6b7685; text-align: right; margin-top: -6px;">
-                <span id="char-count">0</span> characters
-            </div>
+            <p class="char-count"><span id="char-count">0</span> characters</p>
 
             <span>Font</span>
 
@@ -86,14 +46,13 @@
         </form>
 
         <!-- ASCII art screen -->
-        <div class="screen" style="position: relative;">
-            <!-- Copy Button -->
-            <button id="copy-btn" type="button" style="position: absolute; top: 12px; right: 12px; padding: 6px 12px; font-size: 0.8rem; margin: 0; background: #5a6573;">Copy Art</button>
-            <div class="screen" style="margin-top: 0; border: none; padding: 0; background: transparent;">
-                <pre>{{.Art}}</pre>
+        <section class="screen">
+            <div class="screen-toolbar">
+                <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+                <button id="copy-btn" class="secondary-button" type="button">Copy Art</button>
             </div>
-        </div>
-
+            <pre>{{.Art}}</pre>
+        </section>
     </main>
 
     <script>
@@ -104,60 +63,106 @@
         const charCountSpan = document.getElementById('char-count');
         const copyBtn = document.getElementById('copy-btn');
         const themeToggleBtn = document.getElementById('theme-toggle');
+        const feedback = document.getElementById('feedback');
 
-        // Character Counter
+        // Feedback message above the art: type is "error" or "" (neutral)
+        function showFeedback(message, type) {
+            feedback.textContent = message;
+            feedback.className = 'feedback' + (type ? ' feedback-' + type : '');
+        }
+
+        function updateCopyButton() {
+            copyBtn.disabled = preOutput.textContent.trim() === '';
+        }
+
+        // Character counter
         function updateCharCount() {
             charCountSpan.textContent = textarea.value.length;
         }
-        updateCharCount();
-        textarea.addEventListener('input', updateCharCount);
 
-        // Live Art Generation via fetch
+        // Live art generation via fetch
+        let latestRequest = 0;
+
         function updateArt() {
-            const formData = new FormData(form);
-            
+            if (textarea.value === '') {
+                preOutput.textContent = '';
+                showFeedback('Type some text to see your art.', '');
+                updateCopyButton();
+                return;
+            }
+
+            // Only the newest request may update the page, so slow answers can't overwrite fresh ones.
+            const requestId = ++latestRequest;
+
             fetch('/ascii-art', {
                 method: 'POST',
-                body: new URLSearchParams(formData)
+                body: new URLSearchParams(new FormData(form))
             })
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newPre = doc.querySelector('pre');
-                if (newPre) {
-                    preOutput.textContent = newPre.textContent;
+            .then(response => response.text().then(html => ({ ok: response.ok, status: response.status, html })))
+            .then(({ ok, status, html }) => {
+                if (requestId !== latestRequest) return;
+
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+
+                if (!ok) {
+                    // The server sent its error page: show its title and hint here instead.
+                    const title = doc.querySelector('h1');
+                    const hint = doc.querySelector('.error-hint');
+                    const message = (title ? title.textContent : 'Error') +
+                        ' (' + status + ')' + (hint ? ': ' + hint.textContent : '');
+                    preOutput.textContent = '';
+                    showFeedback(message, 'error');
+                    updateCopyButton();
+                    return;
                 }
+
+                const newPre = doc.querySelector('pre');
+                preOutput.textContent = newPre ? newPre.textContent : '';
+                showFeedback('', '');
+                updateCopyButton();
             })
-            .catch(err => console.error(err));
+            .catch(() => {
+                if (requestId !== latestRequest) return;
+                showFeedback('Could not reach the server. Is it still running?', 'error');
+            });
         }
 
-        textarea.addEventListener('input', updateArt);
-        radios.forEach(radio => {
-            radio.addEventListener('change', updateArt);
+        textarea.addEventListener('input', () => {
+            updateCharCount();
+            updateArt();
         });
+        radios.forEach(radio => radio.addEventListener('change', updateArt));
 
-        // Copy Button Logic
+        // Copy button
         copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(preOutput.textContent).then(() => {
-                copyBtn.textContent = 'Copied! ✨';
-                setTimeout(() => {
-                    copyBtn.textContent = 'Copy Art';
-                }, 2000);
-            });
+            navigator.clipboard.writeText(preOutput.textContent)
+                .then(() => {
+                    copyBtn.textContent = 'Copied! ✨';
+                    setTimeout(() => { copyBtn.textContent = 'Copy Art'; }, 2000);
+                })
+                .catch(() => showFeedback('Could not copy. Select the art and copy it by hand.', 'error'));
         });
 
-        // Dark / Light Mode Toggle Logic
+        // Dark / light mode toggle (remembered across page loads)
+        function setThemeLabel() {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            themeToggleBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (dark) {
                 document.documentElement.removeAttribute('data-theme');
-                themeToggleBtn.textContent = '🌙 Dark Mode';
             } else {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggleBtn.textContent = '☀️ Light Mode';
             }
+            try { localStorage.setItem('theme', dark ? 'light' : 'dark'); } catch (e) {}
+            setThemeLabel();
         });
+
+        updateCharCount();
+        updateCopyButton();
+        setThemeLabel();
     </script>
 </body>
 </html>
